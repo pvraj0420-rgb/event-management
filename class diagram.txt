@@ -1,0 +1,34 @@
+@startuml
+
+class User {
+  id
+  name
+  email
+  phone
+}
+
+class Booking {
+  id
+  user_id
+  event_id
+  tickets
+  total_amount
+}
+
+class Event {
+  id
+  title
+  date
+  location
+}
+
+class Category {
+  id
+  name
+}
+
+User "1" -- "many" Booking
+Event "1" -- "many" Booking
+Category "1" -- "many" Event
+
+@enduml

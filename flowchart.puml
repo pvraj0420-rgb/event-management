@@ -1,0 +1,22 @@
+@startuml
+
+start
+
+:User Login/Register;
+:View Events;
+
+if (Select Event?) then (Yes)
+  :Enter Details;
+  :Make Payment;
+  if (Payment Success?) then (Yes)
+    :Store Booking;
+    :Show Confirmation;
+  else (No)
+    :Show Error;
+  endif
+else (No)
+  :Exit;
+endif
+
+stop
+@enduml

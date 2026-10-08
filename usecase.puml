@@ -1,0 +1,17 @@
+@startuml
+left to right direction
+
+actor User
+actor Admin
+
+User --> (Register/Login)
+User --> (View Events)
+User --> (Book Tickets)
+User --> (Make Payment)
+Admin --> (Register/Login)
+Admin --> (Manage Events)
+Admin --> (Manage Categories)
+Admin --> (Manage Bookings)
+Admin --> (Manage Users)
+
+@enduml

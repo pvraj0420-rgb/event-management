@@ -1,0 +1,21 @@
+@startuml
+start
+
+:User visits website;
+:Browse events;
+
+if (Select event?) then (Yes)
+  :Enter details;
+  :Book ticket;
+  :Make payment;
+  if (Payment success?) then (Yes)
+    :Booking confirmed;
+  else (No)
+    :Payment failed;
+  endif
+else (No)
+  :Exit;
+endif
+
+stop
+@enduml
