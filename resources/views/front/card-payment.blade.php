@@ -52,7 +52,7 @@
                             <!-- Card Holder -->
                             <div class="col-lg-6 wow fadeInUp">
                                 <div class="form-clt">
-                                    <input type="text" name="card_name" placeholder="Card Holder Name" required>
+                                    <input type="text" name="card_name" value="{{ session('booking_data.name') ?? session('user')->name ?? '' }}" placeholder="Card Holder Name" required>
                                 </div>
                             </div>
 

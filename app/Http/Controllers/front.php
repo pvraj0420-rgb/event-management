@@ -186,18 +186,19 @@ class front extends Controller
         return redirect()->back()->with('success', 'Profile Updated Successfully');
     }
     public function bookingPage(Request $request, $id)
-{
-    if (!Session::has('user')) {
-        return redirect()->route('login')->with('error', 'Please login first');
+    {
+        if (!Session::has('user')) {
+            return redirect()->route('login')->with('error', 'Please login first');
+        }
+
+        $user = Session::get('user');
+        $event = EventModels::findOrFail($id);
+
+        $qty = $request->qty ?? 1;
+        $total = $request->total ?? 29;
+
+        return view('front.booking', compact('event', 'qty', 'total', 'user'));
     }
-
-    $event = EventModels::findOrFail($id);
-
-    $qty = $request->qty ?? 1;
-    $total = $request->total ?? 29;
-
-    return view('front.booking', compact('event', 'qty', 'total'));
-}
  public function bookEvent(Request $request)
 {
     if (!Session::has('user')) {

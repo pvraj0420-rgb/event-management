@@ -66,21 +66,21 @@
                                     <!-- Name -->
                                     <div class="col-lg-6 wow fadeInUp">
                                         <div class="form-clt">
-                                            <input type="text" name="name" placeholder="Your Name*" required>
+                                            <input type="text" name="name" value="{{ old('name', session('user')->name ?? '') }}" placeholder="Your Name*" required>
                                         </div>
                                     </div>
 
                                     <!-- Email -->
                                     <div class="col-lg-6 wow fadeInUp">
                                         <div class="form-clt">
-                                            <input type="email" name="email" placeholder="Email Address*" required>
+                                            <input type="email" name="email" value="{{ old('email', session('user')->email ?? '') }}" placeholder="Email Address*" required>
                                         </div>
                                     </div>
 
                                     <!-- Mobile -->
                                     <div class="col-lg-6 wow fadeInUp">
                                         <div class="form-clt">
-                                            <input type="text" name="mobile" placeholder="Mobile Number*" required>
+                                            <input type="text" name="mobile" value="{{ old('mobile', session('user')->phone ?? '') }}" placeholder="Mobile Number*" required>
                                         </div>
                                     </div>
 
