@@ -20,4 +20,8 @@ public function user(){
 public function event(){
     return $this->belongsTo(EventModels::class);
 }
+
+public function booking(){
+    return $this->belongsTo(Booking::class, 'booking_id');
+}
 }

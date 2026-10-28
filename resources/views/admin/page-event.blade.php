@@ -48,6 +48,16 @@
                                 </div>
 
                                 <div class="form-group">
+                                    <label>Ticket Price ($ / USD)*</label>
+                                    <input type="number" step="0.01" name="price" value="29.00" class="form-control" placeholder="Enter ticket price (e.g. 29.00)" required>
+                                </div>
+
+                                <div class="form-group">
+                                    <label>Event Capacity (Total Seats)*</label>
+                                    <input type="number" name="capacity" value="100" class="form-control" placeholder="Enter total capacity" required>
+                                </div>
+
+                                <div class="form-group">
                                     <label>Category</label>
                                     <select name="category" class="form-control">
                                         <option value="">Select Category</option>

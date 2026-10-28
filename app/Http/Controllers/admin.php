@@ -7,6 +7,7 @@ use App\Models\Speaker;
 use App\Models\Category;
 use App\Models\EventModels;
 use App\Models\Booking;
+use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Session;
@@ -53,7 +54,22 @@ class admin extends Controller
         if (!Session::has('admin')) {
             return redirect()->route('admin.login')->with('error', 'Please login first');
         }
-        return view('admin.dashboard');
+
+        $totalEvents = EventModels::count();
+        $totalBookings = Booking::count();
+        $totalRevenue = Booking::where('payment_status', 'paid')->sum('total_amount');
+        $totalRevenueInr = Booking::where('payment_status', 'paid')->sum('amount_inr');
+        $totalUsers = User::count();
+        $recentBookings = Booking::with('event')->latest()->take(5)->get();
+
+        return view('admin.dashboard', compact(
+            'totalEvents',
+            'totalBookings',
+            'totalRevenue',
+            'totalRevenueInr',
+            'totalUsers',
+            'recentBookings'
+        ));
     }
 
     public function category()
@@ -151,6 +167,8 @@ class admin extends Controller
         EventModels::create([
             'title' => $request->title,
             'description' => $request->description,
+            'price' => $request->price ?? 29.00,
+            'capacity' => $request->capacity ?? 100,
             'category' => $request->category,
             'date' => $request->date,
             'start_time' => $request->start_time,
@@ -219,6 +237,8 @@ class admin extends Controller
         $event->update([
             'title' => $request->title,
             'description' => $request->description,
+            'price' => $request->price ?? $event->price ?? 29.00,
+            'capacity' => $request->capacity ?? $event->capacity ?? 100,
             'category' => $request->category,
             'date' => $request->date,
             'start_time' => $request->start_time,
@@ -356,6 +376,45 @@ class admin extends Controller
         $bookings = Booking::with('event')->get();
         return view('admin.booking-list', compact('bookings'));
     }
+
+    public function exportBookings()
+    {
+        $bookings = Booking::with('event')->latest()->get();
+        $filename = 'attendees_export_' . date('Y_m_d_His') . '.csv';
+
+        $headers = [
+            'Content-Type'        => 'text/csv',
+            'Content-Disposition' => "attachment; filename=\"$filename\"",
+            'Pragma'              => 'no-cache',
+            'Cache-Control'       => 'must-revalidate, post-check=0, pre-check=0',
+            'Expires'             => '0'
+        ];
+
+        $callback = function () use ($bookings) {
+            $handle = fopen('php://output', 'w');
+            fputcsv($handle, ['Booking ID', 'Event Name', 'Attendee Name', 'Email', 'Mobile', 'Tickets', 'Total Amount', 'Currency', 'Payment Method', 'Payment Status', 'Booking Date']);
+
+            foreach ($bookings as $b) {
+                fputcsv($handle, [
+                    $b->id,
+                    $b->event->title ?? 'N/A',
+                    $b->name,
+                    $b->email,
+                    $b->mobile,
+                    $b->tickets,
+                    $b->amount_inr ?? $b->total_amount,
+                    $b->currency ?? 'USD',
+                    $b->payment_method,
+                    $b->payment_status,
+                    $b->created_at ? $b->created_at->format('Y-m-d H:i:s') : ''
+                ]);
+            }
+
+            fclose($handle);
+        };
+
+        return response()->stream($callback, 200, $headers);
+    }
    public function deleteBooking($id)
 {
     $booking = Booking::find($id);
@@ -400,6 +459,9 @@ public function forgotPassword()
 
 public function resetPasswordPage()
 {
+    if (!session('email')) {
+        return redirect()->route('admin.forgot.password')->with('error', 'Session expired. Please enter your email again.');
+    }
     return view('admin.reset-password');
 }
 public function checkForgotPassword(Request $request)
@@ -416,7 +478,16 @@ public function checkForgotPassword(Request $request)
 }
 public function updatePassword(Request $request)
 {
-    AdminModels::where('email', $request->email)
+    $request->validate([
+        'password' => 'required|min:6|confirmed'
+    ]);
+
+    $sessionEmail = session('email');
+    if (!$sessionEmail || $sessionEmail !== $request->email) {
+        return redirect()->route('admin.login')->with('error', 'Invalid or expired password reset session.');
+    }
+
+    AdminModels::where('email', $sessionEmail)
         ->update([
             'password' => Hash::make($request->password)
         ]);

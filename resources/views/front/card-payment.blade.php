@@ -73,7 +73,13 @@
                             <!-- Amount -->
                             <div class="col-lg-12 wow fadeInUp">
                                 <div class="form-clt">
-                                    <input type="text" value="Amount:${{ session('booking_data.tickets') * 29 }}" readonly>
+                                    @php
+                                        $bookingData = session('booking_data');
+                                        $eventRecord = isset($bookingData['event_id']) ? \App\Models\EventModels::find($bookingData['event_id']) : null;
+                                        $ticketPrice = $eventRecord->price ?? 29;
+                                        $ticketTotal = ($bookingData['tickets'] ?? 1) * $ticketPrice;
+                                    @endphp
+                                    <input type="text" value="Amount: ${{ $ticketTotal }}" readonly>
                                 </div>
                             </div>
 

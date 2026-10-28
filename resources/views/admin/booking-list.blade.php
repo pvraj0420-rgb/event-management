@@ -14,7 +14,16 @@
         <div class="content">
             <div class="container-fluid mt-4 px-4">
                 <div class="card-box">
-                    <h4><b>Booking List</b></h4>
+                    <div class="row" style="margin-bottom: 15px;">
+                        <div class="col-xs-6">
+                            <h4 class="m-t-0"><b>Booking List</b></h4>
+                        </div>
+                        <div class="col-xs-6 text-right">
+                            <a href="{{ route('admin.export.bookings') }}" class="btn btn-success btn-sm waves-effect waves-light">
+                                Export CSV
+                            </a>
+                        </div>
+                    </div>
                     <div class="table-responsive">
                         <table class="table table-striped table bordered">
                             <thead>
@@ -59,10 +68,12 @@
                                     <td>
                                         <!-- ✅ APPROVE BUTTON -->
                                         @if($book->payment_status == 'pending')
-                                        <a href="{{ route('admin.approve.payment', $book->id) }}"
-                                            class="btn btn-success btn-sm">
-                                            Approve
-                                        </a>
+                                        <form action="{{ route('admin.approve.payment', $book->id) }}" method="POST" style="display:inline;">
+                                            @csrf
+                                            <button type="submit" class="btn btn-success btn-sm">
+                                                Approve
+                                            </button>
+                                        </form>
                                         @endif
 
                                         <form action="{{ route('admin.deletebooking', $book->id) }}" method="POST" style="display:inline;">

@@ -4,6 +4,7 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\front;
 use App\Http\Controllers\admin;
 use App\Http\Controllers\InvoiceController;
+use App\Http\Controllers\PaymentController;
 /*
 |--------------------------------------------------------------------------
 | Web Routes
@@ -56,6 +57,9 @@ Route::post('/book-event',[Front::class,'bookEvent'])->name('book.event');
 Route::get('/card-payment', [front::class, 'cardPage'])->name('card.payment.page');
 Route::post('/card-payment-process', [front::class, 'cardProcess'])->name('card.payment.process');
 
+Route::post('/razorpay/verify', [PaymentController::class, 'verifyPayment'])->name('razorpay.verify');
+Route::post('/webhook/razorpay', [PaymentController::class, 'handleWebhook'])->name('razorpay.webhook');
+
 Route::get('/my-orders', [front::class, 'myOrders'])->name('my.orders');
 
 Route::get('/download-ticket/{id}', [Front::class, 'downloadTicket'])->name('download.ticket');
@@ -70,53 +74,54 @@ Route::post('/user/update-password', [Front::class, 'updateUserPassword'])->name
 
 Route::get('/logout', [front::class, 'logout'])->name('logout');
 
-/* ADMIN ROUTES */
-
+/* ADMIN GUEST ROUTES */
 Route::get('/admin/login', [admin::class, 'login'])->name('admin.login');
 Route::post('/admin/checklogin', [admin::class, 'checklogin'])->name('admin.checklogin');
 
 Route::get('/admin/register', [admin::class, 'register'])->name('admin.register');
 Route::post('/admin/adddata', [admin::class, 'adddata'])->name('admin.adddata');
 
-Route::get('/admin/dashboard', [admin::class, 'dashboard'])->name('admin.dashboard');
-
-Route::get('/admin/category', [admin::class, 'category'])->name('admin.category');
-Route::post('/admin/addcategory', [admin::class, 'addcategory'])->name('admin.addcategory');
-Route::get('/admin/editcategory/{id}', [admin::class, 'editcategory'])->name('admin.editcategory');
-Route::get('/admin/deletecategory/{id}', [admin::class, 'deletecategory'])->name('admin.deletecategory');
-Route::post('/admin/updatecategory/{id}', [admin::class, 'updatecategory'])->name('admin.updatecategory');
-Route::get('/admin/categorylist', [admin::class, 'categorylist'])->name('admin.categorylist');
-
-Route::get('/admin/page-event', [admin::class, 'pageEvent'])->name('admin.page-event');
-Route::post('/admin/addevent',[admin::class,'addevent'])->name('admin.addevent');
-Route::get('/admin/eventlist',[admin::class,'eventlist'])->name('admin.eventlist');
-Route::get('/admin/editevent/{id}',[admin::class,'editevent'])->name('admin.editevent');
-Route::get('/admin/deleteevent/{id}',[admin::class,'deleteevent'])->name('admin.deleteevent');
-Route::post('/admin/updateevent/{id}', [admin::class,'updateevent'])->name('admin.updateevent');
-
-Route::get('/admin/speaker', [admin::class, 'speaker'])->name('admin.speaker');
-Route::post('/admin/addspeaker', [admin::class, 'addspeaker'])->name('admin.addspeaker');
-Route::get('/admin/speaker-list', [admin::class, 'speakerlist'])->name('admin.speakerlist');
-Route::get('/admin/editspeaker/{id}', [admin::class, 'editspeaker'])->name('admin.editspeaker');
-Route::get('/admin/deletespeaker/{id}', [admin::class, 'deletespeaker'])->name('admin.deletespeaker');
-Route::post('/admin/updatespeaker/{id}', [admin::class, 'updatespeaker'])->name('admin.updatespeaker');
-
-Route::get('/admin/booking-list',[admin::class,'bookingList'])->name('admin.bookinglist');
-Route::delete('/admin/delete-booking/{id}', [admin::class, 'deleteBooking'])->name('admin.deletebooking');
-
-Route::get('/admin/approve-payment/{id}', [admin::class, 'approvePayment'])->name('admin.approve.payment');
-
 Route::get('/admin/forgot-password', [admin::class, 'forgotPassword'])->name('admin.forgot.password');
-
 Route::post('/admin/forgot-password', [admin::class, 'checkForgotPassword'])->name('admin.forgot.check');
-
 Route::get('/admin/reset-password', [admin::class, 'resetPasswordPage'])->name('admin.reset.password');
-
 Route::post('/admin/update-password', [admin::class, 'updatePassword'])->name('admin.update.password');
 
+/* ADMIN AUTHENTICATED ROUTES */
+Route::middleware(['admin.auth'])->group(function () {
+    Route::get('/admin/dashboard', [admin::class, 'dashboard'])->name('admin.dashboard');
 
-Route::get('/admin/logout', [admin::class, 'logout'])->name('admin.logout');
-Route::get('/invoice/view/{id}', [InvoiceController::class, 'viewInvoiceById']) ->name('invoice.view');
-Route::delete('/admin/invoice-delete/{id}', [InvoiceController::class, 'deleteInvoice'])->name('admin.invoice.delete');
-Route::get('/admin/invoice-list', [InvoiceController::class, 'adminInvoiceList'])->name('admin.invoice.list');
+    Route::get('/admin/category', [admin::class, 'category'])->name('admin.category');
+    Route::post('/admin/addcategory', [admin::class, 'addcategory'])->name('admin.addcategory');
+    Route::get('/admin/editcategory/{id}', [admin::class, 'editcategory'])->name('admin.editcategory');
+    Route::match(['GET', 'DELETE'], '/admin/deletecategory/{id}', [admin::class, 'deletecategory'])->name('admin.deletecategory');
+    Route::post('/admin/updatecategory/{id}', [admin::class, 'updatecategory'])->name('admin.updatecategory');
+    Route::get('/admin/categorylist', [admin::class, 'categorylist'])->name('admin.categorylist');
+
+    Route::get('/admin/page-event', [admin::class, 'pageEvent'])->name('admin.page-event');
+    Route::post('/admin/addevent', [admin::class, 'addevent'])->name('admin.addevent');
+    Route::get('/admin/eventlist', [admin::class, 'eventlist'])->name('admin.eventlist');
+    Route::get('/admin/editevent/{id}', [admin::class, 'editevent'])->name('admin.editevent');
+    Route::match(['GET', 'DELETE'], '/admin/deleteevent/{id}', [admin::class, 'deleteevent'])->name('admin.deleteevent');
+    Route::post('/admin/updateevent/{id}', [admin::class, 'updateevent'])->name('admin.updateevent');
+
+    Route::get('/admin/speaker', [admin::class, 'speaker'])->name('admin.speaker');
+    Route::post('/admin/addspeaker', [admin::class, 'addspeaker'])->name('admin.addspeaker');
+    Route::get('/admin/speaker-list', [admin::class, 'speakerlist'])->name('admin.speakerlist');
+    Route::get('/admin/editspeaker/{id}', [admin::class, 'editspeaker'])->name('admin.editspeaker');
+    Route::match(['GET', 'DELETE'], '/admin/deletespeaker/{id}', [admin::class, 'deletespeaker'])->name('admin.deletespeaker');
+    Route::post('/admin/updatespeaker/{id}', [admin::class, 'updatespeaker'])->name('admin.updatespeaker');
+
+    Route::get('/admin/booking-list', [admin::class, 'bookingList'])->name('admin.bookinglist');
+    Route::get('/admin/export-bookings', [admin::class, 'exportBookings'])->name('admin.export.bookings');
+    Route::delete('/admin/delete-booking/{id}', [admin::class, 'deleteBooking'])->name('admin.deletebooking');
+
+    Route::match(['GET', 'POST'], '/admin/approve-payment/{id}', [admin::class, 'approvePayment'])->name('admin.approve.payment');
+
+    Route::get('/admin/invoice-list', [InvoiceController::class, 'adminInvoiceList'])->name('admin.invoice.list');
+    Route::delete('/admin/invoice-delete/{id}', [InvoiceController::class, 'deleteInvoice'])->name('admin.invoice.delete');
+    Route::get('/invoice/view/{id}', [InvoiceController::class, 'viewInvoiceById'])->name('invoice.view');
+
+    Route::get('/admin/logout', [admin::class, 'logout'])->name('admin.logout');
+});
+
 Route::get('/invoice-download/{id}', [InvoiceController::class, 'download'])->name('invoice.download');

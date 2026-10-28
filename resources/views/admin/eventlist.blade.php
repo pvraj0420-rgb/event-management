@@ -67,7 +67,11 @@
                                                 <td>
                                                     <a href="{{route('admin.editevent',$event->id)}}" class="btn btn-primary btn-sm">Edit</a>
 
-                                                    <a href="{{route('admin.deleteevent',$event->id)}}" class="btn btn-danger btn-sm" onclick="return confirm('Are you sure?')">Delete</a>
+                                                    <form action="{{route('admin.deleteevent',$event->id)}}" method="POST" style="display:inline;">
+                                                        @csrf
+                                                        @method('DELETE')
+                                                        <button type="submit" class="btn btn-danger btn-sm" onclick="return confirm('Are you sure?')">Delete</button>
+                                                    </form>
                                                 </td>
 
 

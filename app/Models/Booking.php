@@ -20,11 +20,27 @@ class Booking extends Model
         'mobile',
         'tickets',
         'total_amount',
-        'payment_method'
+        'currency',
+        'amount_inr',
+        'razorpay_order_id',
+        'razorpay_payment_id',
+        'razorpay_signature',
+        'payment_method',
+        'payment_status'
     ];
 
     public function event()
     {
         return $this->belongsTo(EventModels::class, 'event_id');
+    }
+
+    public function user()
+    {
+        return $this->belongsTo(User::class, 'user_id');
+    }
+
+    public function invoice()
+    {
+        return $this->hasOne(Invoice::class, 'booking_id');
     }
 }

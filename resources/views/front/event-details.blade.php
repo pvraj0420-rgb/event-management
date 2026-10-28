@@ -147,6 +147,16 @@
                                                 <span class="label">E-mail:</span>
                                                 <span class="value">{{ $event->email }}</span>
                                             </div>
+                                            <div class="mt-3 text-center" style="padding-top: 10px;">
+                                                @php
+                                                    $startDt = $event->date ? date('Ymd\THis', strtotime($event->date . ' ' . ($event->start_time ?? '09:00:00'))) : date('Ymd\THis');
+                                                    $endDt = $event->date ? date('Ymd\THis', strtotime($event->date . ' ' . ($event->end_time ?? '18:00:00'))) : date('Ymd\THis', strtotime('+2 hours'));
+                                                    $calendarUrl = "https://calendar.google.com/calendar/render?action=TEMPLATE&text=" . urlencode($event->title) . "&details=" . urlencode($event->description ?? '') . "&location=" . urlencode(($event->venue ?? '') . ', ' . ($event->location ?? '')) . "&dates={$startDt}/{$endDt}";
+                                                @endphp
+                                                <a href="{{ $calendarUrl }}" target="_blank" class="theme-btn w-100" style="padding: 10px; font-size: 13px; text-align: center; border-radius: 6px;">
+                                                    <i class="fa-solid fa-calendar-plus me-1"></i> Add to Google Calendar
+                                                </a>
+                                            </div>
                                         </div>
                                     </div>
                                     <div class="event-purchase-ticket-items qty-wrapper wow fadeInUp" data-wow-delay=".5s">
@@ -161,7 +171,7 @@
                                                 <div class="column">
                                                     <span class="caption">Ticket Price :</span>
                                                     <span class="amount">
-                                                        $<span class="unit-price">29</span>
+                                                        $<span class="unit-price">{{ number_format($event->price ?? 29, 2) }}</span>
                                                     </span>
                                                 </div>
 
@@ -177,7 +187,7 @@
                                                 <div class="column">
                                                     <span class="caption">Sub Total :</span>
                                                     <span class="amount">
-                                                        $<span class="sub-total">29.00</span>
+                                                        $<span class="sub-total">{{ number_format($event->price ?? 29, 2) }}</span>
                                                     </span>
                                                 </div>
                                             </div>
@@ -189,7 +199,7 @@
                                             </p>
                                             <hr>
                                             <h4>
-                                                Total Cost: $<span class="total-cost">29.00</span>
+                                                Total Cost: $<span class="total-cost">{{ number_format($event->price ?? 29, 2) }}</span>
                                             </h4>
                                         </div>
 
@@ -197,7 +207,7 @@
 <form id="bookingForm" action="{{ route('booking.page', $event->id) }}" method="GET">
 
         <input type="hidden" name="qty" id="formQty" value="1">
-        <input type="hidden" name="total" id="formTotal" value="29">
+        <input type="hidden" name="total" id="formTotal" value="{{ $event->price ?? 29 }}">
 
         <button type="button" onclick="submitForm()" class="theme-btn w-100">
             Purchase Now
@@ -234,7 +244,7 @@
             @include('front.footer')
             <script>
 let qty = 1;
-let price = 29;
+let price = Number("{{ $event->price ?? 29 }}");
 
 const qtyInput = document.querySelector('.qty-input');
 const subTotal = document.querySelector('.sub-total');

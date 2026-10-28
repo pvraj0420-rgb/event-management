@@ -13,6 +13,8 @@ use App\Models\EventModels;
 use App\Http\Controllers\InvoiceController;
 use App\Models\Speaker;
 use App\Models\Booking;
+use App\Models\Category;
+use Illuminate\Support\Facades\DB;
 
 class front extends Controller
 {
@@ -38,10 +40,31 @@ class front extends Controller
     {
         return view('front.contact');
     }
-    public function event()
+    public function event(Request $request)
     {
-        $events = EventModels::all();
-        return view('front.event', compact('events'));
+        $query = EventModels::query();
+
+        if ($request->filled('search')) {
+            $searchTerm = $request->search;
+            $query->where(function ($q) use ($searchTerm) {
+                $q->where('title', 'like', "%{$searchTerm}%")
+                  ->orWhere('description', 'like', "%{$searchTerm}%")
+                  ->orWhere('location', 'like', "%{$searchTerm}%");
+            });
+        }
+
+        if ($request->filled('category')) {
+            $query->where('category', $request->category);
+        }
+
+        if ($request->filled('date')) {
+            $query->whereDate('date', $request->date);
+        }
+
+        $events = $query->latest('date')->get();
+        $categories = Category::all();
+
+        return view('front.event', compact('events', 'categories'));
     }
     public function eventDetails($id)
     {
@@ -214,6 +237,11 @@ class front extends Controller
         'payment_method' => 'required'
     ]);
 
+    // ✅ RAZORPAY / RUPAY ONLINE PAYMENT REDIRECT
+    if (isset($request->payment_method) && in_array(trim($request->payment_method), ['razorpay', 'razorpay_rupay', 'online'])) {
+        return app(\App\Http\Controllers\PaymentController::class)->initiatePayment($request);
+    }
+
     // ✅ FIXED: CARD REDIRECT (STRICT CHECK)
     if (isset($request->payment_method) && trim($request->payment_method) === 'card') {
         Session::put('booking_data', $request->all());
@@ -222,6 +250,9 @@ class front extends Controller
 
     // ✅ CASH / OFFLINE LOGIC
     $user = Session::get('user');
+    $event = EventModels::findOrFail($request->event_id);
+    $price = (float) ($event->price ?? 29);
+    $totalAmount = $request->tickets * $price;
 
     if (trim($request->payment_method) === 'offline') {
         $payment_status = 'pending';
@@ -230,26 +261,31 @@ class front extends Controller
         $payment_status = 'paid';
     }
 
-$booking = Booking::create([
-        'event_id' => $request->event_id,
-        'user_id' => $user->id,
-        'username' => $user->name,
-        'name' => $request->name,
-        'email' => $request->email,
-        'mobile' => $request->mobile,
-        'tickets' => $request->tickets,
-        'total_amount' => $request->tickets * 29,
-        'payment_method' => trim($request->payment_method),
-        'payment_status' => $payment_status
-    ]);
-$invoiceController = new \App\Http\Controllers\InvoiceController();
+    DB::transaction(function () use ($request, $user, $event, $totalAmount, $payment_status) {
+        $booking = Booking::create([
+            'event_id'       => $request->event_id,
+            'user_id'        => $user->id,
+            'username'       => $user->name,
+            'name'           => $request->name,
+            'email'          => $request->email,
+            'mobile'         => $request->mobile,
+            'tickets'        => $request->tickets,
+            'total_amount'   => $totalAmount,
+            'payment_method' => trim($request->payment_method),
+            'payment_status' => $payment_status
+        ]);
 
-$invoiceController->createInvoice(
-    $booking->id,
-    $request->event_id,
-    $request->tickets * 29
-);
-   return redirect()->route('my.orders')->with('success', 'Booking Successful');
+        if ($payment_status === 'paid') {
+            $invoiceController = new \App\Http\Controllers\InvoiceController();
+            $invoiceController->createInvoice(
+                $booking->id,
+                $request->event_id,
+                $totalAmount
+            );
+        }
+    });
+
+    return redirect()->route('my.orders')->with('success', 'Booking Successful');
 }
 
 public function cardPage()
@@ -261,27 +297,31 @@ public function cardProcess(Request $request)
 {
     $data = Session::get('booking_data');
     $user = Session::get('user');
+    $event = EventModels::findOrFail($data['event_id']);
+    $price = (float) ($event->price ?? 29);
+    $totalAmount = $data['tickets'] * $price;
 
-    $booking = Booking::create([
-        'event_id' => $data['event_id'],
-        'user_id' => $user->id,
-        'username' => $user->name,
-        'name' => $data['name'],
-        'email' => $data['email'],
-        'mobile' => $data['mobile'],
-        'tickets' => $data['tickets'],
-        'total_amount' => $data['tickets'] * 29,
-        'payment_method' => 'card',
-        'payment_status' => 'paid'
-    ]);
+    DB::transaction(function () use ($data, $user, $totalAmount) {
+        $booking = Booking::create([
+            'event_id'       => $data['event_id'],
+            'user_id'        => $user->id,
+            'username'       => $user->name,
+            'name'           => $data['name'],
+            'email'          => $data['email'],
+            'mobile'         => $data['mobile'],
+            'tickets'        => $data['tickets'],
+            'total_amount'   => $totalAmount,
+            'payment_method' => 'card',
+            'payment_status' => 'paid'
+        ]);
 
-    $invoiceController = new \App\Http\Controllers\InvoiceController();
-
-    $invoiceController->createInvoice(
-        $booking->id,
-        $data['event_id'],
-        $data['tickets'] * 29
-    );
+        $invoiceController = new \App\Http\Controllers\InvoiceController();
+        $invoiceController->createInvoice(
+            $booking->id,
+            $data['event_id'],
+            $totalAmount
+        );
+    });
 
     Session::forget('booking_data');
 
@@ -308,12 +348,22 @@ public function downloadTicket($id)
 {
     $booking = Booking::with('event')->findOrFail($id);
 
+    $sessionUser = Session::get('user');
+    $sessionAdmin = Session::get('admin');
+
+    // IDOR Protection: User must own the booking, or an admin must be logged in
+    if (!$sessionAdmin && (!$sessionUser || $sessionUser->id != $booking->user_id)) {
+        return redirect()->route('login')->with('error', 'Please login to access your ticket.');
+    }
+
     // only paid allowed
     if($booking->payment_status != 'paid'){
         return back()->with('error','Payment Pending!');
     }
 
-    $pdf = Pdf::loadView('front.ticket', compact('booking'));
+    $pdf = Pdf::loadView('front.ticket', compact('booking'))
+        ->setPaper('a4', 'portrait')
+        ->setOptions(['isHtml5ParserEnabled' => true, 'isRemoteEnabled' => true]);
 
     return $pdf->download('ticket-'.$booking->id.'.pdf');
 }

@@ -65,9 +65,38 @@
                         </ul>
                     </div>
 
+                    <!-- Search & Filter Bar -->
+                    <div class="mb-5 p-4 rounded shadow-sm" style="background: #ffffff; border: 1px solid #e5e7eb;">
+                        <form action="{{ route('event') }}" method="GET">
+                            <div class="row g-3 align-items-center">
+                                <div class="col-lg-5 col-md-12">
+                                    <input type="text" name="search" value="{{ request('search') }}" class="form-control" placeholder="Search event title or venue..." style="padding: 12px 16px; border-radius: 6px; border: 1px solid #d1d5db;">
+                                </div>
+                                <div class="col-lg-3 col-md-6">
+                                    <select name="category" class="form-select" style="padding: 12px 16px; border-radius: 6px; border: 1px solid #d1d5db;">
+                                        <option value="">All Categories</option>
+                                        @foreach($categories as $cat)
+                                            <option value="{{ $cat->name }}" {{ request('category') == $cat->name ? 'selected' : '' }}>
+                                                {{ $cat->name }}
+                                            </option>
+                                        @endforeach
+                                    </select>
+                                </div>
+                                <div class="col-lg-2 col-md-6">
+                                    <input type="date" name="date" value="{{ request('date') }}" class="form-control" style="padding: 12px 16px; border-radius: 6px; border: 1px solid #d1d5db;">
+                                </div>
+                                <div class="col-lg-2 col-md-12">
+                                    <button type="submit" class="theme-btn w-100" style="padding: 12px; border-radius: 6px;">
+                                        Filter <i class="fa-solid fa-filter ms-1"></i>
+                                    </button>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+
                     <div class="tab-content">
                         <div id="thumb1" class="tab-pane fade">
-                            @foreach($events as $event)
+                            @forelse($events as $event)
                             <div class="event-signle-list-items pt-0">
                                 <div class="event-left-items">
                                     <div class="date-text">
@@ -94,12 +123,17 @@
                                         </div>
                                     </div>
                                 </div>
-                                <a href="{{route('contact')}}" class="theme-btn">
+                                <a href="{{route('event.details', $event->id)}}" class="theme-btn">
                                     Buy Ticket
                                     <i class="fa-solid fa-arrow-up-right"></i>
                                 </a>
                             </div>
-                            @endforeach
+                            @empty
+                            <div class="text-center p-5 text-muted">
+                                <h4>No events found matching your filter.</h4>
+                                <a href="{{ route('event') }}" class="theme-btn mt-3">Reset Filters</a>
+                            </div>
+                            @endforelse
                         </div>
                         <div id="thumb2" class="tab-pane fade show active">
                             @foreach($events as $event)
@@ -130,7 +164,7 @@
                                         </div>
                                     </div>
                                 </div>
-                                <a href="{{route('contact')}}" class="theme-btn">
+                                <a href="{{route('event.details', $event->id)}}" class="theme-btn">
                                     Buy Ticket
                                     <i class="fa-solid fa-arrow-up-right"></i>
                                 </a>
@@ -165,7 +199,7 @@
                                         </div>
                                     </div>
                                 </div>
-                                <a href="{{route('contact')}}" class="theme-btn">
+                                <a href="{{route('event.details', $event->id)}}" class="theme-btn">
                                     Buy Ticket
                                     <i class="fa-solid fa-arrow-up-right"></i>
                                 </a>

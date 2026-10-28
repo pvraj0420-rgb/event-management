@@ -99,6 +99,7 @@
             style="width:100%; padding:10px; border:1px solid #ccc; border-radius:5px;">
             
             <option value="">-- Select Payment --</option>
+            <option value="razorpay">Online Payment (RuPay / UPI / Cards / NetBanking)</option>
             <option value="card">Card Payment</option>
             <option value="cash">Cash Payment</option>
             <option value="offline">Offline Payment</option>

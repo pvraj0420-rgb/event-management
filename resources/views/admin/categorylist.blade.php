@@ -41,7 +41,11 @@
                                 <td>{{$cat->name}}</td>
                                 <td>
                                     <a href="{{route('admin.editcategory',$cat->id)}}" class="btn btn-primary btn-sm">Edit</a>
-                                    <a href="{{route('admin.deletecategory',$cat->id)}}" class="btn btn-danger btn-sm">Delete</a>
+                                    <form action="{{route('admin.deletecategory',$cat->id)}}" method="POST" style="display:inline;">
+                                        @csrf
+                                        @method('DELETE')
+                                        <button type="submit" class="btn btn-danger btn-sm" onclick="return confirm('Are you sure?')">Delete</button>
+                                    </form>
                                 </td>
                             </tr>
                             @endforeach

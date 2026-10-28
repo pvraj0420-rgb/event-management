@@ -44,55 +44,66 @@
                                 @else
 
                                 <div class="table-responsive">
-                                    <table class="table table-bordered mt-3">
-                                        <thead>
+                                    <table class="table table-bordered table-hover align-middle mt-3">
+                                        <thead class="table-light">
                                             <tr>
-                                                <th>ID</th>
+                                                <th class="text-center" width="60">#ID</th>
                                                 <th>Event</th>
-                                                <th>Tickets</th>
-                                                <th>Payment</th>
-                                                <th>Status</th>
+                                                <th class="text-center">Tickets</th>
+                                                <th>Payment Method</th>
+                                                <th class="text-center">Status</th>
                                                 <th>Date</th>
-                                                <th>Ticket</th>
-                                                <th>Invoice</th>
+                                                <th class="text-center">Ticket</th>
+                                                <th class="text-center">Invoice</th>
                                             </tr>
                                         </thead>
 
                                         <tbody>
                                             @foreach($bookings as $book)
                                             <tr>
-                                                <td>{{ $book->id }}</td>
-                                                <td>{{ $book->event->title ?? 'N/A' }}</td>
-                                                <td>{{ $book->tickets }}</td>
-                                                <td>{{ $book->payment_method }}</td>
-
+                                                <td class="text-center font-weight-bold">#{{ $book->id }}</td>
                                                 <td>
+                                                    <strong>{{ $book->event->title ?? 'N/A' }}</strong>
+                                                    @if(!empty($book->event->date))
+                                                        <br><small class="text-muted"><i class="fa-regular fa-calendar-days"></i> {{ \Carbon\Carbon::parse($book->event->date)->format('d M Y') }}</small>
+                                                    @endif
+                                                </td>
+                                                <td class="text-center">
+                                                    <span class="badge bg-secondary">{{ $book->tickets }}</span>
+                                                </td>
+                                                <td>
+                                                    <span class="text-capitalize">{{ strtoupper(str_replace('_', ' ', $book->payment_method ?? 'ONLINE')) }}</span>
+                                                </td>
+
+                                                <td class="text-center">
                                                     @if($book->payment_status == 'paid')
-                                                    <span style="color:green;font-weight:600;">Paid</span>
+                                                    <span class="badge bg-success" style="font-size: 12px; padding: 6px 10px;">Paid</span>
                                                     @else
-                                                    <span style="color:red;font-weight:600;">Pending</span>
+                                                    <span class="badge bg-warning text-dark" style="font-size: 12px; padding: 6px 10px;">Pending</span>
                                                     @endif
                                                 </td>
 
-                                                <td>{{ $book->created_at }}</td>
+                                                <td>{{ !empty($book->created_at) ? \Carbon\Carbon::parse($book->created_at)->format('d M Y') : 'N/A' }}</td>
 
-                                                <!-- ✅ DOWNLOAD BUTTON -->
-                                                <td>
+                                                <!-- ✅ DOWNLOAD TICKET BUTTON -->
+                                                <td class="text-center">
                                                     @if($book->payment_status == 'paid')
-                                                    <a href="{{ route('download.ticket', $book->id) }}" class="btn btn-success btn-sm">
-                                                        Download Ticket
+                                                    <a href="{{ route('download.ticket', $book->id) }}" class="btn btn-success btn-sm text-nowrap">
+                                                        <i class="fa-solid fa-ticket"></i> Download Ticket
                                                     </a>
                                                     @else
-                                                    <span style="color:red;">Not Available</span>
+                                                    <span class="badge bg-light text-muted">Not Available</span>
                                                     @endif
                                                 </td>
-                                                <td>
+
+                                                <!-- ✅ DOWNLOAD INVOICE BUTTON -->
+                                                <td class="text-center">
                                                     @if($book->payment_status == 'paid')
-                                                    <a href="{{ route('invoice.download', $book->id) }}" class="btn btn-primary btn-sm">
-                                                        Download Invoice
+                                                    <a href="{{ route('invoice.download', $book->id) }}" class="btn btn-primary btn-sm text-nowrap">
+                                                        <i class="fa-solid fa-file-invoice"></i> Download Invoice
                                                     </a>
                                                     @else
-                                                    <span style="color:red;">Not Available</span>
+                                                    <span class="badge bg-light text-muted">Not Available</span>
                                                     @endif
                                                 </td>
 
