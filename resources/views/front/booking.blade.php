@@ -56,7 +56,7 @@
                                             <p><b>Location:</b> {{ $event->location }}</p>
                                             <p><b>Date:</b> {{ $event->date }}</p>
                                            <p><b>Tickets:</b> <span id="showTickets">{{$qty}}</span></p>
-<p><b>Total Price:</b> $<span id="showTotal">{{$total}}</span></p>
+<p><b>Total Price:</b> ₹<span id="showTotal">{{$total}}</span></p>
                                         </div>
                                     </div>
 

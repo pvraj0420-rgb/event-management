@@ -50,7 +50,7 @@
                                     <div class="pricing-header">
                                         <h3>Starter Pass</h3>
                                         <p>Perfect for students and early-stage designer</p>
-                                        <h2>$49 <sub>/ Per Person</sub></h2>
+                                        <h2>₹49 <sub>/ Per Person</sub></h2>
                                     </div>
                                     <a href="{{ route('contact') }}" class="theme-btn">
                                         Purchase now
@@ -82,7 +82,7 @@
                                     <div class="pricing-header">
                                         <h3>Professional Pass</h3>
                                         <p>Best for freelancers and working professional</p>
-                                        <h2>$59 <sub>/ Per Person</sub></h2>
+                                        <h2>₹59 <sub>/ Per Person</sub></h2>
                                     </div>
                                     <a href="{{ route('contact') }}" class="theme-btn color-2">
                                         Purchase now
@@ -113,7 +113,7 @@
                                     <div class="pricing-header">
                                         <h3>All-Access VIP</h3>
                                         <p>Designed for senior creatives and design</p>
-                                        <h2>$69 <sub>/ Per Person</sub></h2>
+                                        <h2>₹69 <sub>/ Per Person</sub></h2>
                                     </div>
                                     <a href="{{ route('contact') }}" class="theme-btn">
                                         Purchase now

@@ -258,7 +258,7 @@
                                 <div class="pricing-header">
                                     <h3>Single Access</h3>
                                     <p>All prices exclude 15% VAT</p>
-                                    <h2>$49 <sub>/ Per Person</sub></h2>
+                                    <h2>₹49 <sub>/ Per Person</sub></h2>
                                 </div>
                                 <h4>WHAT’S INCLUDED</h4>
                                 <ul class="pricing-list">
@@ -290,7 +290,7 @@
                                 <div class="pricing-header">
                                     <h3>For VIP Access</h3>
                                     <p>All prices exclude 15% VAT</p>
-                                    <h2>$69 <sub>/ Per Person</sub></h2>
+                                    <h2>₹69 <sub>/ Per Person</sub></h2>
                                 </div>
                                 <h4>WHAT’S INCLUDED</h4>
                                 <ul class="pricing-list">
@@ -322,7 +322,7 @@
                                 <div class="pricing-header">
                                     <h3>Standard Access</h3>
                                     <p>All prices exclude 15% VAT</p>
-                                    <h2>$99 <sub>/ Per Person</sub></h2>
+                                    <h2>₹99 <sub>/ Per Person</sub></h2>
                                 </div>
                                 <h4>WHAT’S INCLUDED</h4>
                                 <ul class="pricing-list">

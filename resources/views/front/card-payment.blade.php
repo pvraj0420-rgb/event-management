@@ -79,7 +79,7 @@
                                         $ticketPrice = $eventRecord->price ?? 29;
                                         $ticketTotal = ($bookingData['tickets'] ?? 1) * $ticketPrice;
                                     @endphp
-                                    <input type="text" value="Amount: ${{ $ticketTotal }}" readonly>
+                                    <input type="text" value="Amount: ₹{{ number_format($ticketTotal, 2) }}" readonly>
                                 </div>
                             </div>
 

@@ -171,7 +171,7 @@
                                                 <div class="column">
                                                     <span class="caption">Ticket Price :</span>
                                                     <span class="amount">
-                                                        $<span class="unit-price">{{ number_format($event->price ?? 29, 2) }}</span>
+                                                        ₹<span class="unit-price">{{ number_format($event->price ?? 29, 2) }}</span>
                                                     </span>
                                                 </div>
 
@@ -187,7 +187,7 @@
                                                 <div class="column">
                                                     <span class="caption">Sub Total :</span>
                                                     <span class="amount">
-                                                        $<span class="sub-total">{{ number_format($event->price ?? 29, 2) }}</span>
+                                                        ₹<span class="sub-total">{{ number_format($event->price ?? 29, 2) }}</span>
                                                     </span>
                                                 </div>
                                             </div>
@@ -199,7 +199,7 @@
                                             </p>
                                             <hr>
                                             <h4>
-                                                Total Cost: $<span class="total-cost">{{ number_format($event->price ?? 29, 2) }}</span>
+                                                Total Cost: ₹<span class="total-cost">{{ number_format($event->price ?? 29, 2) }}</span>
                                             </h4>
                                         </div>
 

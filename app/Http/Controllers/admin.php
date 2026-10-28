@@ -403,7 +403,7 @@ class admin extends Controller
                     $b->mobile,
                     $b->tickets,
                     $b->amount_inr ?? $b->total_amount,
-                    $b->currency ?? 'USD',
+                    $b->currency ?? 'INR',
                     $b->payment_method,
                     $b->payment_status,
                     $b->created_at ? $b->created_at->format('Y-m-d H:i:s') : ''

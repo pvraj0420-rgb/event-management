@@ -48,8 +48,8 @@
                                 </div>
 
                                 <div class="form-group">
-                                    <label>Ticket Price ($ / USD)*</label>
-                                    <input type="number" step="0.01" name="price" value="29.00" class="form-control" placeholder="Enter ticket price (e.g. 29.00)" required>
+                                    <label>Ticket Price (₹ / INR)*</label>
+                                    <input type="number" step="0.01" name="price" value="299.00" class="form-control" placeholder="Enter ticket price in ₹ (e.g. 299.00)" required>
                                 </div>
 
                                 <div class="form-group">

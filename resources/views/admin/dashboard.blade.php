@@ -36,10 +36,10 @@
                     <div class="card-box" style="border-top: 3px solid #f59e0b;">
                         <h4 class="m-t-0 text-muted" style="font-size: 14px; text-transform: uppercase;">Total Revenue</h4>
                         <h2 class="text-warning m-b-0" style="font-weight: 700;">
-                            ${{ number_format($totalRevenue, 2) }}
+                            ₹{{ number_format($totalRevenueInr > 0 ? $totalRevenueInr : $totalRevenue, 2) }}
                         </h2>
                         <p class="text-muted m-t-10 m-b-0" style="font-size: 12px;">
-                            ₹{{ number_format($totalRevenueInr > 0 ? $totalRevenueInr : ($totalRevenue * 83.50), 2) }} INR
+                            Total earnings in INR (₹)
                         </p>
                     </div>
                 </div>
@@ -92,11 +92,7 @@
                                     <td>{{ $b->email }}</td>
                                     <td><span class="badge badge-info">{{ $b->tickets }}</span></td>
                                     <td>
-                                        @if($b->amount_inr)
-                                            ₹{{ number_format($b->amount_inr, 2) }}
-                                        @else
-                                            ${{ number_format($b->total_amount, 2) }}
-                                        @endif
+                                        ₹{{ number_format($b->amount_inr ?: $b->total_amount, 2) }}
                                     </td>
                                     <td>
                                         <span class="badge badge-default">{{ strtoupper(str_replace('_', ' ', $b->payment_method)) }}</span>

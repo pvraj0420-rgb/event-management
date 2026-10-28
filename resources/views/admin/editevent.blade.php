@@ -45,8 +45,8 @@
                                 </div>
 
                                 <div class="form-group">
-                                    <label>Ticket Price ($ / USD)*</label>
-                                    <input type="number" step="0.01" name="price" value="{{ $event->price ?? 29.00 }}" class="form-control" placeholder="Enter ticket price" required>
+                                    <label>Ticket Price (₹ / INR)*</label>
+                                    <input type="number" step="0.01" name="price" value="{{ $event->price ?? 299.00 }}" class="form-control" placeholder="Enter ticket price in ₹" required>
                                 </div>
 
                                 <div class="form-group">

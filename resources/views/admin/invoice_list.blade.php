@@ -56,7 +56,7 @@
                                                 <td>{{ $invoice->user->name ?? 'N/A' }}</td>
                                                 <td>{{ $invoice->user->email ?? 'N/A' }}</td>
                                                 <td>{{ $invoice->event->title ?? 'N/A' }}</td>
-                                                <td>{{ $invoice->amount }}</td>
+                                                <td>₹{{ number_format((float)$invoice->amount, 2) }}</td>
 
                                                 <td>
                                                     @if($invoice->status == 'paid')

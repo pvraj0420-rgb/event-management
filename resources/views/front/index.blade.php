@@ -222,7 +222,7 @@
                                                         <img src="{{asset('assets/img/home-1/service-icon-01.svg')}}" alt="img">
                                                     </div>
                                                     <div class="content">
-                                                        <p>Entry Fee: <span>$59/Per Person</span></p>
+                                                        <p>Entry Fee: <span>₹59/Per Person</span></p>
                                                     </div>
                                                 </li>
                                                 <li>
@@ -272,7 +272,7 @@
                                                         <img src="{{asset('assets/img/home-1/service-icon-01.svg')}}" alt="img">
                                                     </div>
                                                     <div class="content">
-                                                        <p>Entry Fee: <span>$59/Per Person</span></p>
+                                                        <p>Entry Fee: <span>₹59/Per Person</span></p>
                                                     </div>
                                                 </li>
                                                 <li>
@@ -322,7 +322,7 @@
                                                         <img src="{{asset('assets/img/home-1/service-icon-01.svg')}}" alt="img">
                                                     </div>
                                                     <div class="content">
-                                                        <p>Entry Fee: <span>$59/Per Person</span></p>
+                                                        <p>Entry Fee: <span>₹59/Per Person</span></p>
                                                     </div>
                                                 </li>
                                                 <li>
@@ -372,7 +372,7 @@
                                                         <img src="{{asset('assets/img/home-1/service-icon-01.svg')}}" alt="img">
                                                     </div>
                                                     <div class="content">
-                                                        <p>Entry Fee: <span>$59/Per Person</span></p>
+                                                        <p>Entry Fee: <span>₹59/Per Person</span></p>
                                                     </div>
                                                 </li>
                                                 <li>
@@ -427,7 +427,7 @@
                                                         <img src="{{asset('assets/img/home-1/service-icon-01.svg')}}" alt="img">
                                                     </div>
                                                     <div class="content">
-                                                        <p>Entry Fee: <span>$59/Per Person</span></p>
+                                                        <p>Entry Fee: <span>₹59/Per Person</span></p>
                                                     </div>
                                                 </li>
                                                 <li>
@@ -477,7 +477,7 @@
                                                         <img src="{{asset('assets/img/home-1/service-icon-01.svg')}}" alt="img">
                                                     </div>
                                                     <div class="content">
-                                                        <p>Entry Fee: <span>$59/Per Person</span></p>
+                                                        <p>Entry Fee: <span>₹59/Per Person</span></p>
                                                     </div>
                                                 </li>
                                                 <li>
@@ -527,7 +527,7 @@
                                                         <img src="{{asset('assets/img/home-1/service-icon-01.svg')}}" alt="img">
                                                     </div>
                                                     <div class="content">
-                                                        <p>Entry Fee: <span>$59/Per Person</span></p>
+                                                        <p>Entry Fee: <span>₹59/Per Person</span></p>
                                                     </div>
                                                 </li>
                                                 <li>
@@ -578,7 +578,7 @@
                                                         <img src="{{asset('assets/img/home-1/service-icon-01.svg')}}" alt="img">
                                                     </div>
                                                     <div class="content">
-                                                        <p>Entry Fee: <span>$59/Per Person</span></p>
+                                                        <p>Entry Fee: <span>₹59/Per Person</span></p>
                                                     </div>
                                                 </li>
                                                 <li>
@@ -632,7 +632,7 @@
                                                         <img src="{{asset('assets/img/home-1/service-icon-01.svg')}}" alt="img">
                                                     </div>
                                                     <div class="content">
-                                                        <p>Entry Fee: <span>$59/Per Person</span></p>
+                                                        <p>Entry Fee: <span>₹59/Per Person</span></p>
                                                     </div>
                                                 </li>
                                                 <li>
@@ -682,7 +682,7 @@
                                                         <img src="{{asset('assets/img/home-1/service-icon-01.svg')}}" alt="img">
                                                     </div>
                                                     <div class="content">
-                                                        <p>Entry Fee: <span>$59/Per Person</span></p>
+                                                        <p>Entry Fee: <span>₹59/Per Person</span></p>
                                                     </div>
                                                 </li>
                                                 <li>
@@ -732,7 +732,7 @@
                                                         <img src="{{asset('assets/img/home-1/service-icon-01.svg')}}" alt="img">
                                                     </div>
                                                     <div class="content">
-                                                        <p>Entry Fee: <span>$59/Per Person</span></p>
+                                                        <p>Entry Fee: <span>₹59/Per Person</span></p>
                                                     </div>
                                                 </li>
                                                 <li>
@@ -782,7 +782,7 @@
                                                         <img src="{{asset('assets/img/home-1/service-icon-01.svg')}}" alt="img">
                                                     </div>
                                                     <div class="content">
-                                                        <p>Entry Fee: <span>$59/Per Person</span></p>
+                                                        <p>Entry Fee: <span>₹59/Per Person</span></p>
                                                     </div>
                                                 </li>
                                                 <li>
@@ -1129,7 +1129,7 @@
                                     <div class="pricing-header">
                                         <h3>Single Access</h3>
                                         <p>All prices exclude 15% VAT</p>
-                                        <h2>$49 <sub>/ Per Person</sub></h2>
+                                        <h2>₹49 <sub>/ Per Person</sub></h2>
                                     </div>
                                     <h4>WHAT’S INCLUDED</h4>
                                     <ul class="pricing-list">
@@ -1161,7 +1161,7 @@
                                     <div class="pricing-header">
                                         <h3>For VIP Access</h3>
                                         <p>All prices exclude 15% VAT</p>
-                                        <h2>$69 <sub>/ Per Person</sub></h2>
+                                        <h2>₹69 <sub>/ Per Person</sub></h2>
                                     </div>
                                     <h4>WHAT’S INCLUDED</h4>
                                     <ul class="pricing-list">
@@ -1193,7 +1193,7 @@
                                     <div class="pricing-header">
                                         <h3>Standard Access</h3>
                                         <p>All prices exclude 15% VAT</p>
-                                        <h2>$99 <sub>/ Per Person</sub></h2>
+                                        <h2>₹99 <sub>/ Per Person</sub></h2>
                                     </div>
                                     <h4>WHAT’S INCLUDED</h4>
                                     <ul class="pricing-list">

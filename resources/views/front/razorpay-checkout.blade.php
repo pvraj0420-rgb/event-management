@@ -61,9 +61,8 @@
                                         <th style="background:#f9f9f9;">Total Amount</th>
                                         <td>
                                             <span style="font-size:1.25rem; font-weight:700; color:#198754;">
-                                                ₹{{ number_format($totalInr, 2) }} INR
+                                                ₹{{ number_format($totalInr, 2) }}
                                             </span>
-                                            <small class="text-muted"> (${{ number_format($booking->total_amount, 2) }} USD)</small>
                                         </td>
                                     </tr>
                                 </tbody>
